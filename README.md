@@ -7,13 +7,13 @@
     <h3 align="center">Guided Activity 4</h3>
 </div>
 
-# Guided Activity 4: Advanced SQL Concepts
+# Guided Activity 5: Indexing and Query Performance
 
 This repository is a part of CSI-234 at Renton Technical College.
 
 Clone this repository to your local machine and complete the instructions below. You will be submitting screenshots as well as SQL code in this repository.
 
-## Guided Activity 4: Clone the repository and make a screenshots folder
+## Guided Activity 5: Clone the repository and make a screenshots folder
 
 1. Clone the repository to your local machine using GitHub Desktop or another GitHub tool.
 2. Make note of the folder where you cloned the repository.
@@ -21,20 +21,108 @@ Clone this repository to your local machine and complete the instructions below.
 4. Inside of this folder, create a "Screenshots" folder. This is where you will save your screenshots for this assignment.
 5. Iclude your SQL Queries in a .SQL file inside of the repository.
 
-## Guided Activity 4: Advanced SQL Concepts
+## Guided Activity 5: Let's create some dummy data to work with.
 
-### 1. Views
-
-A view is a virtual table based on the result-set of an SQL statement. It contains rows and columns, just like a real table. The fields in a view are fields from one or more real tables in the database.
+### 1. Create a new Schema with data
 
 ```sql
-CREATE VIEW CustomerView AS
-SELECT FirstName, LastName, EmailAddress, Phone
-FROM SalesLT.Customer;
+GO
+CREATE SCHEMA Activity5;
+GO
 ```
+### 2. Add some tables with data to the schema, Run the following Query. This will take some time. Be Patient. We are creating 3 tables with 10,000 rows of data.
 
-1. Query the newly created View and take a screenshot of the results.
-2. Modify the above view to include the CompanyName column. Take a screenshot of the modified view.
+```sql
+-- Drop tables if they exist
+IF OBJECT_ID('Activity5.OrderDetails', 'U') IS NOT NULL
+    DROP TABLE Activity5.OrderDetails;
+
+IF OBJECT_ID('Activity5.Orders', 'U') IS NOT NULL
+    DROP TABLE Activity5.Orders;
+
+IF OBJECT_ID('Activity5.Customers', 'U') IS NOT NULL
+    DROP TABLE Activity5.Customers;
+
+-- Create Customers table
+CREATE TABLE Activity5.Customers (
+    CustomerID INT PRIMARY KEY IDENTITY(1,1),
+    FirstName NVARCHAR(50),
+    LastName NVARCHAR(50),
+    Email NVARCHAR(100),
+    Phone NVARCHAR(15),
+    Zip NVARCHAR(10)
+);
+
+-- Fill Customers table with 10,000 records
+DECLARE @Counter1 INT = 1;
+WHILE @Counter1 <= 10000
+BEGIN
+    INSERT INTO Activity5.Customers (FirstName, LastName, Email, Phone, Zip)
+    VALUES (
+        'FirstName' + CAST(@Counter1 AS NVARCHAR),
+        'LastName' + CAST(@Counter1 AS NVARCHAR),
+        'email' + CAST(@Counter1 AS NVARCHAR) + '@example.com',
+        CAST((RAND() * 10000000000) + 1000000000 AS NVARCHAR),
+        CAST((RAND() * 100000) + 10000 AS NVARCHAR)
+    );
+    SET @Counter1 = @Counter1 + 1;
+END;
+
+-- Create Orders table
+CREATE TABLE Activity5.Orders (
+    OrderID INT PRIMARY KEY IDENTITY(1,1),
+    CustomerID INT FOREIGN KEY REFERENCES Activity5.Customers(CustomerID),
+    OrderDate DATE,
+    OrderStatus NVARCHAR(50),
+    ShippingAddress NVARCHAR(255)
+);
+
+-- Fill Orders table with 10,000 records
+DECLARE @Counter2 INT = 1;
+WHILE @Counter2 <= 10000
+BEGIN
+    INSERT INTO Activity5.Orders (CustomerID, OrderDate, OrderStatus, ShippingAddress)
+    VALUES (
+        (RAND() * 10000) + 1,
+        DATEADD(DAY, (RAND() * 365), '2020-01-01'),
+        CASE CAST((RAND() * 3) + 1 AS INT)
+            WHEN 1 THEN 'Shipped'
+            WHEN 2 THEN 'Pending'
+            ELSE 'Cancelled'
+        END,
+        'Address' + CAST(@Counter2 AS NVARCHAR)
+    );
+    SET @Counter2 = @Counter2 + 1;
+END;
+
+-- Create OrderDetails table
+CREATE TABLE Activity5.OrderDetails (
+    OrderDetailID INT PRIMARY KEY IDENTITY(1,1),
+    OrderID INT FOREIGN KEY REFERENCES Activity5.Orders(OrderID),
+    ProductName NVARCHAR(100),
+    Quantity INT,
+    UnitPrice DECIMAL(10, 2),
+    Discount DECIMAL(5, 2)
+);
+
+-- Fill OrderDetails table with 10,000 records
+DECLARE @Counter3 INT = 1;
+WHILE @Counter3 <= 10000
+BEGIN
+    INSERT INTO Activity5.OrderDetails (OrderID, ProductName, Quantity, UnitPrice, Discount)
+    VALUES (
+        (RAND() * 10000) + 1,
+        'Product' + CAST((RAND() * 100) AS NVARCHAR),
+        (RAND() * 10) + 1,
+        (RAND() * 100) + 1,
+        (RAND() * 0.5)
+    );
+    SET @Counter3 = @Counter3 + 1;
+END;
+```
+When complete you should have the following 3 tables: 
+
+![image](https://raw.githubusercontent.com/EmeryCSI/csi234-guidedactivity5/assets/102991550/4fcfa014-e65d-43d9-b2a1-0eae1dfb05a4)
 
 ### 2. Functions
 
