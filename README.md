@@ -19,7 +19,7 @@ Clone this repository to your local machine and complete the instructions below.
 2. Make note of the folder where you cloned the repository.
 3. Click "Show in Explorer" to open the repository folder.
 4. Inside of this folder, create a "Screenshots" folder. This is where you will save your screenshots for this assignment.
-5. Iclude your SQL Queries in a .SQL file inside of the repository.
+5. Include your SQL Queries in a .SQL file inside of the repository.
 
 ## Guided Activity 5: Let's create some dummy data to work with.
 
