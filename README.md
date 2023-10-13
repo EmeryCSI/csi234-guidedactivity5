@@ -4,7 +4,7 @@
 
 <div align="center">  
     <img src="logo.jpg" alt="Logo">
-    <h3 align="center">Guided Activity 4</h3>
+    <h3 align="center">Guided Activity 5</h3>
 </div>
 
 # Guided Activity 5: Indexing and Query Performance
