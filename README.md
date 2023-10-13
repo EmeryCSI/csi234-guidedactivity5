@@ -140,6 +140,7 @@ What was the estimated CPU Cost of the first query?
 What was the estimated CPU Cost of the second query?
 What was the Number of Rows Read by the first query?
 What was the Number of Rows Read by the first query?
+Why is the first query so much more efficient than the second query?
 
 ### Before Indexing:
 
