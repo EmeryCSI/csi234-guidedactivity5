@@ -121,7 +121,7 @@ BEGIN
 END;
 ```
 
-### 3. Creating our first index
+### 1. Creating our first index
 
 Run the following Queries with the Execution Plan enabled
 
@@ -135,11 +135,15 @@ Activity5.Customers
 WHERE LastName = 'LastName100';
 ```
 
-Answer the following questions in your .sql file
+### Answer the following questions in your .sql file
 What was the estimated CPU Cost of the first query?
+
 What was the estimated CPU Cost of the second query?
+
 What was the Number of Rows Read by the first query?
+
 What was the Number of Rows Read by the first query?
+
 Why is the first query so much more efficient than the second query?
 
 ### Before Indexing:
@@ -166,7 +170,7 @@ WHERE LastName = 'LastName100';
 
 Take a screenshot of the new query plan. Notice the difference. There are now two operations performed a key lookup and an index seek. The actual number of rows read is 1 and the compute cost is significantly reduced.
 
-### 4. Composite Indexes
+### 2. Composite Indexes
 
 A composite index is a type of database index that includes two or more columns from a table. While standard indexes are built using a single column, composite indexes are constructed using a combination of columns. This allows for faster search, retrieval, and sorting of database records based on multiple criteria.
 
@@ -189,7 +193,7 @@ ON Activity5.OrderDetails(Quantity, Discount);
 
 Re-run the query and screenshot the execution plan. Notice that your new index is now being used. Screenshot the new execution plan. Notice the significant savings on CPU cost. Notice we have gone from performing and index scan (slow) to an index seek(fast).
 
-### 5. Indexing and Joins
+### 3. Indexing and Joins
 
 First lets find a customer in your database who has placed multiple orders. Remember this data was randomly generated so your results will be different than mine.
 
