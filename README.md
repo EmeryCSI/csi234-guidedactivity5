@@ -120,26 +120,41 @@ BEGIN
     SET @Counter3 = @Counter3 + 1;
 END;
 ```
-When complete you should have the following 3 tables: 
 
-![image](https://raw.githubusercontent.com/EmeryCSI/csi234-guidedactivity5/assets/102991550/4fcfa014-e65d-43d9-b2a1-0eae1dfb05a4)
+### 3. Creating our first index
 
-### 2. Functions
-
-SQL functions are methods which return a value after processing on the input values.
+Run the following Queries with the Execution Plan enabled
 
 ```sql
-CREATE FUNCTION GetProductsTotalValue(@ProductId INT)
-RETURNS DECIMAL(18, 2) -- Adjust precision and scale as needed
-AS
-BEGIN
-    RETURN (
-        SELECT SUM(OrderQty * UnitPrice)
-        FROM SalesLT.SalesOrderDetail 
-        WHERE ProductId = @ProductId 
-    )
-END;
+SELECT * 
+FROM Activity5.Customers 
+WHERE CustomerID = 1;
+
+SELECT * FROM 
+Activity5.Customers 
+WHERE LastName = 'LastName100';
 ```
+
+Answer the following questions in your .sql file
+What was the estimated CPU Cost of the first query?
+What was the estimated CPU Cost of the second query?
+What was the Number of Rows Read by the first query?
+What was the Number of Rows Read by the first query?
+
+### Before Indexing:
+
+SQL Server will perform a full table scan, reading every row in the Customers table to find the rows that match the condition. This is inefficient and time-consuming, especially for large tables.
+Index to Create: Non-clustered index on LastName.
+
+```sql
+CREATE NONCLUSTERED INDEX idx_Customers_LastName ON Activity5.Customers(LastName);
+```
+How It Works:
+
+A non-clustered index is like an index in a book. It creates a separate data structure that holds a pointer to the data in the table. This allows SQL Server to quickly locate the data without scanning the entire table.
+After Indexing:
+
+SQL Server will use the non-clustered index to quickly find the rows that match the condition, significantly reducing the number of rows it needs to read.
 
 1. Call the function: SELECT dbo.GetProductsTotalValue(836) AS TotalValue;
 2. Take a screenshot of the function output.
